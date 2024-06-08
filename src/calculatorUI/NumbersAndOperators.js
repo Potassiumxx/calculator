@@ -66,7 +66,7 @@ export function displayOperators(operator) {
 
   // When user presses operator button
   if (isAdvancedOperator) {
-    smallTextField.textContent = `${newString} ${operator}`;
+    smallTextField.textContent = `${parseFloat(firstNumber)} ${operator}`;
   } else {
     bigTextField.textContent = `${parseFloat(bigTextField.textContent)}`;
     smallTextField.textContent = `${parseFloat(bigTextField.textContent)} ${operator}`;
@@ -108,6 +108,7 @@ export function displayAnswer() {
         smallTextField.textContent = `${newString} ${convertOperatorSign(operatorSign, "DOM")} ${secondNumber}`;
       }
     } else {
+      console.log("else");
       smallTextField.textContent = `${parseFloat(firstNumber)} ${convertOperatorSign(operatorSign, "DOM")} ${parseFloat(
         secondNumber // Not sure why prettier formatted it in a weird way here
       )}`;
@@ -117,11 +118,11 @@ export function displayAnswer() {
     smallTextField.textContent = `${parseFloat(firstNumber)} ${convertOperatorSign(operatorSign, "DOM")} ${parseFloat(
       secondNumber // Not sure why prettier formatted it in a weird way here
     )}`;
-    // If user clicks equals to sign continuously.
-    assignOperands(bigTextField.textContent);
   }
 
   smallTextField.textContent += " =";
+  // If user clicks equals to sign continuously, the answer will be assigned as firstNumber
+  assignOperands(bigTextField.textContent);
 
   // When user does something like dividing by 0
   // We are using firstNumber to check the condition because after perfoming operation firstNumber will be replaced by answer.

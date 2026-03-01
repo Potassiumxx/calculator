@@ -8,9 +8,15 @@ import {
   answer,
   assignOperator,
   initialiseCalculator,
+  switchToSecondNumber,
 } from "../calculatorLogic/CalculatorState.js";
 import { checkForInvalidAnswer, convertOperatorSign } from "../utils/helper.js";
-import { initialseAdvancedOperatorStates, isAdvancedOperator, newString, string } from "./AdvancedOperators.js";
+import {
+  initialseAdvancedOperatorStates,
+  isAdvancedOperator,
+  newString,
+  string,
+} from "./AdvancedOperators.js";
 
 export let newInput = false,
   resetCalculator = false,
@@ -39,14 +45,16 @@ export function displayNumbers(number) {
   }
 
   // Do not let decimal appear more than once
-  if (number === "." && bigTextField.textContent.includes(".")) return assignOperands(bigTextField.textContent);
+  if (number === "." && bigTextField.textContent.includes("."))
+    return assignOperands(bigTextField.textContent);
 
   // Replace initial zero with clicked number except when user clicks on decimal button or zero
   if (bigTextField.textContent === "0" && number !== ".") {
     bigTextField.textContent = number;
     newInput = false;
   } else {
-    // Replace bigTextField values with new input values if user clicks on any number buttons except decimal after selecting an operator
+    // Replace bigTextField values with new input values if user clicks on any number buttons except
+    // decimal after selecting an operator
     if (newInput) {
       bigTextField.textContent = number;
       newInput = false;
@@ -54,6 +62,12 @@ export function displayNumbers(number) {
   }
 
   assignOperands(bigTextField.textContent);
+
+  // When an operand is selected right after selecting some advanced operator.
+  if (isAdvancedOperator && switchToSecondNumber) {
+    initialseAdvancedOperatorStates();
+    smallTextField.textContent = `${firstNumber} ${convertOperatorSign(operatorSign, "DOM")}`;
+  }
 }
 
 export function displayOperators(operator) {
@@ -66,10 +80,10 @@ export function displayOperators(operator) {
 
   // When user presses operator button
   if (isAdvancedOperator) {
-    smallTextField.textContent = `${parseFloat(firstNumber)} ${operator}`;
+    smallTextField.textContent = `${Number(firstNumber)} ${operator}`;
   } else {
-    bigTextField.textContent = `${parseFloat(bigTextField.textContent)}`;
-    smallTextField.textContent = `${parseFloat(bigTextField.textContent)} ${operator}`;
+    bigTextField.textContent = `${Number(bigTextField.textContent)}`;
+    smallTextField.textContent = `${Number(bigTextField.textContent)} ${operator}`;
   }
 
   assignOperator(operator);
@@ -78,7 +92,7 @@ export function displayOperators(operator) {
   // This part has to be placed after assignOperator function so that answer can be calculated and displayed as soon as another operator button is pressed
   if (answer !== "") {
     bigTextField.textContent = `${answer}`;
-    smallTextField.textContent = `${parseFloat(bigTextField.textContent)} ${operator}`;
+    smallTextField.textContent = `${Number(bigTextField.textContent)} ${operator}`;
   }
 
   // When user does something like dividing 0 by 0
@@ -92,31 +106,32 @@ export function displayOperators(operator) {
 
 export function displayAnswer() {
   // The reason to call the function "evaluateAnswer()" instead of the variable "answer" is so that the function can get receive operands, perform operation and finally give answer
-  bigTextField.textContent = parseFloat(evaluateAnswer());
+  bigTextField.textContent = Number(evaluateAnswer());
 
   // Check if user clicks equals to sign without providing an operator
   // If there is no operator, just return the number on screen as answer
-  if (operatorSign === "" || operatorSign === "No operator") smallTextField.textContent = `${parseFloat(evaluateAnswer())}`;
+  if (operatorSign === "" || operatorSign === "No operator")
+    smallTextField.textContent = `${Number(evaluateAnswer())}`;
   // if some special operator was clicked before clicking on equals to button
   else if (isAdvancedOperator) {
     if (smallTextField.textContent.includes("negate")) {
       // If there is a situation where calculation is "8 + negate(8)" or anything like that where negate is after a number, the if block will prevent screen's text to become "8 + negate(8) + 8 =" and will instead show "8 + negate(8) =". The if block will always run after continuous operation (firstNumber + secondNumber + negate(answer))
       // The else block will make the text to become "negate(8) + secondNumber = " if user clicks on equals to button after doing negate of previous operation's answer.
       if (isOperatorActive) {
-        smallTextField.textContent = `${newString} ${convertOperatorSign(operatorSign, "DOM")} ${secondNumber}`;
+        // smallTextField.textContent = `${newString} ${convertOperatorSign(operatorSign, "DOM")} ${secondNumber}`;
       } else {
         smallTextField.textContent = `${newString} ${convertOperatorSign(operatorSign, "DOM")} ${secondNumber}`;
       }
     } else {
       console.log("else");
-      smallTextField.textContent = `${parseFloat(firstNumber)} ${convertOperatorSign(operatorSign, "DOM")} ${parseFloat(
-        secondNumber // Not sure why prettier formatted it in a weird way here
+      smallTextField.textContent = `${Number(firstNumber)} ${convertOperatorSign(operatorSign, "DOM")} ${Number(
+        secondNumber, // Not sure why prettier formatted it in a weird way here
       )}`;
     }
     initialseAdvancedOperatorStates();
   } else {
-    smallTextField.textContent = `${parseFloat(firstNumber)} ${convertOperatorSign(operatorSign, "DOM")} ${parseFloat(
-      secondNumber // Not sure why prettier formatted it in a weird way here
+    smallTextField.textContent = `${Number(firstNumber)} ${convertOperatorSign(operatorSign, "DOM")} ${Number(
+      secondNumber, // Not sure why prettier formatted it in a weird way here
     )}`;
   }
 

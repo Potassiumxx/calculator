@@ -1,30 +1,30 @@
 function add(x, y) {
-  return x + y;
+  return Number(x) + Number(y);
 }
 function subtract(x, y) {
-  return x - y;
+  return Number(x) - Number(y);
 }
 function multiply(x, y) {
-  return x * y;
+  return Number(x) * Number(y);
 }
 function divide(x, y) {
-  return x / y;
+  return Number(x) / Number(y);
 }
 
 export function operate(firstNumber, secondNumber, operator) {
   switch (operator) {
     case "+":
-      return add(parseFloat(firstNumber), parseFloat(secondNumber));
+      return add(firstNumber, secondNumber);
     case "-":
-      return subtract(parseFloat(firstNumber), parseFloat(secondNumber));
+      return subtract(firstNumber, secondNumber);
     case "*":
-      return multiply(parseFloat(firstNumber), parseFloat(secondNumber));
+      return multiply(firstNumber, secondNumber);
     case "/":
-      return divide(parseFloat(firstNumber), parseFloat(secondNumber));
+      return divide(firstNumber, secondNumber);
   }
 }
 
 export function negateSign(operand) {
-  return parseFloat(operand * -1);
+  return Number(operand * -1);
   //   console.log(operand);
 }

@@ -48,6 +48,7 @@ export function displayChangeSign() {
   else if (secondNumber === "" && isOperatorActive) {
     string = ` negate(${smallTextField.textContent.slice(0, -1).replace(/\s/g, "")})`;
     smallTextField.textContent += string;
+    newString = string;
     replaceSmallTextField = false;
     console.log("3");
   }

@@ -1,6 +1,15 @@
-import { assignOperands, switchToSecondNumber, secondNumber, firstNumber } from "../calculatorLogic/CalculatorState.js";
+import {
+  assignOperands,
+  switchToSecondNumber,
+  secondNumber,
+  firstNumber,
+} from "../calculatorLogic/CalculatorState.js";
 import { bigTextField, smallTextField } from "./dom.js";
-import { resetCalculator, isOperatorActive, isOperandActive } from "./NumbersAndOperators.js";
+import {
+  resetCalculator,
+  isOperatorActive,
+  isOperandActive,
+} from "./NumbersAndOperators.js";
 import { negateSign } from "../calculatorLogic/CalculatorOperation.js";
 
 // To replace value of smallTextField by bigTextField value (answer)
@@ -34,7 +43,8 @@ export function displayChangeSign() {
     newString = smallTextField.textContent;
     console.log("2");
   }
-  // If user has selected operator but has not assigned second operator yet and clicks on change sign button
+  // If user has assigned first operand and selected operator but has not assigned second operand
+  // yet and clicks on change sign button
   else if (secondNumber === "" && isOperatorActive) {
     string = ` negate(${smallTextField.textContent.slice(0, -1).replace(/\s/g, "")})`;
     smallTextField.textContent += string;
@@ -53,9 +63,12 @@ export function displayChangeSign() {
       smallTextField.textContent += ` ${string}`;
     } else {
       // prevString = string;
-      newString = ` negate(${string})`;
+      newString = ` negate(${string.replace(/\s+/g, "")})`;
       console.log({ newString, string });
-      smallTextField.textContent = smallTextField.textContent.replace(string, newString);
+      smallTextField.textContent = smallTextField.textContent.replace(
+        string,
+        newString,
+      );
       string = newString;
     }
     replaceSmallTextField = false;
